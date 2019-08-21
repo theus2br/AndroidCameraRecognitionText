@@ -16,7 +16,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent" />
 
-    <TextView
+  <TextView
         android:id="@+id/text_view"
         android:text="No Text"
         android:layout_alignParentBottom="true"

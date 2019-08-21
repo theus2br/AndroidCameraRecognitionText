@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     CameraSource cameraSource;
     final int RequestCameraPermissionID = 1001;
 
-
+    //Metodo que faz o opt-in pra usar camera e valida se já está liberado
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -40,18 +40,19 @@ public class MainActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
                 }
             }
             break;
         }
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Seta a camera dentro do surfaceView
         cameraView = (SurfaceView) findViewById(R.id.surface_view);
         textView = (TextView) findViewById(R.id.text_view);
 
@@ -60,9 +61,11 @@ public class MainActivity extends AppCompatActivity {
             Log.w("MainActivity", "Detector dependencies are not yet available");
         } else {
 
+            //Definições pra converter imagem em imagem
             cameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)
                     .setFacing(CameraSource.CAMERA_FACING_BACK)
                     .setRequestedPreviewSize(1280, 1024)
+                    //velocidaed de conversão
                     .setRequestedFps(2.0f)
                     .setAutoFocusEnabled(true)
                     .build();
