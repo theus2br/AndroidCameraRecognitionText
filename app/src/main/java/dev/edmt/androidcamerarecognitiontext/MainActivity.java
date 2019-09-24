@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             Log.w("MainActivity", "Detector dependencies are not yet available");
         } else {
 
-            //Definições pra converter imagem em imagem
+            //Definições pra converter imagem em texto
             cameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)
                     .setFacing(CameraSource.CAMERA_FACING_BACK)
                     .setRequestedPreviewSize(1280, 1024)
@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
+                //Metodo que finaliza a captura de camera
                 @Override
                 public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
                     cameraSource.stop();
@@ -104,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
+
+                //Metodo que monta a string no textView com um objeto StringBuilder
                 @Override
                 public void receiveDetections(Detector.Detections<TextBlock> detections) {
 
