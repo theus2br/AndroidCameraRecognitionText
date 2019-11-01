@@ -1,15 +1,20 @@
 package dev.edmt.androidcamerarecognitiontext;
 
 import android.Manifest;
+import android.accessibilityservice.AccessibilityServiceInfo;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.TextView;
 
 import com.google.android.gms.vision.CameraSource;
@@ -18,6 +23,7 @@ import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.IOException;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,7 +31,28 @@ public class MainActivity extends AppCompatActivity {
     TextView textView;
     CameraSource cameraSource;
     final int RequestCameraPermissionID = 1001;
+    AccessibilityManager am = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
+    private static final String TALKBACK_SETTING_ACTIVITY_NAME = "com.android.talkback.TalkBackPreferencesActivity";
 
+
+    public static boolean accessibilityEnable(Context context) {
+        boolean enable = false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            try {
+                AccessibilityManager manager = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+                List<AccessibilityServiceInfo> serviceList = manager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_SPOKEN);
+                for (AccessibilityServiceInfo serviceInfo : serviceList) {
+                    String name = serviceInfo.getSettingsActivityName();
+                    if (!TextUtils.isEmpty(name) && name.equals(TALKBACK_SETTING_ACTIVITY_NAME)) {
+                        enable = true;
+                    }
+                }
+            } catch (Exception e) {
+
+            }
+        }
+        return enable;
+    }
     //Metodo que faz o opt-in pra usar camera e valida se já está liberado
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -45,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
             break;
         }
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
